@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora Civil UAN</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f8ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .contenedor {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #004080;
+    }
+
+    label, select, input {
+      margin: 10px 0;
+      display: block;
+      width: 100%;
+      text-align: left;
+    }
+
+    input, select, button {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #004080;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0066cc;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <img src="logo-uan.png"
+         alt="Logo Universidad Antonio Nariño"
+         class="logo">
+
+    <h2>Calculadora Civil UAN</h2>
+
+    <label for="opcion">¿Qué deseas calcular?</label>
+    <select id="opcion" onchange="mostrarFormulario()">
+      <option value="">--Seleccionar--</option>
+      <option value="voltaje">Voltaje (V = I × R)</option>
+      <option value="corriente">Corriente (I = V / R)</option>
+      <option value="resistencia">Resistencia (R = V / I)</option>
+      <option value="capacitancia">Capacitancia (C = Q / V)</option>
+      <option value="carga">Carga (Q = C × V)</option>
+    </select>
+
+    <form id="formulario" onsubmit="calcular(event)">
+      <!-- Los inputs se insertan aquí dinámicamente -->
+    </form>
+
+    <div id="resultado"></div>
+
+    <footer>
+      Diseñado por Deyvi Muñoz
+    </footer>
+  </div>
+
+  <script>
+    function mostrarFormulario() {
+      const opcion = document.getElementById("opcion").value;
+      const formulario = document.getElementById("formulario");
+      formulario.innerHTML = "";
+
+      let html = "";
+      if (opcion === "voltaje") {
+        html += '<label>Corriente (I en A): <input type="number" step="any" name="I" required></label>';
+        html += '<label>Resistencia (R en Ω): <input type="number" step="any" name="R" required></label>';
+      } else if (opcion === "corriente") {
+        html += '<label>Voltaje (V en V): <input type="number" step="any" name="V" required></label>';
+        html += '<label>Resistencia (R en Ω): <input type="number" step="any" name="R" required></label>';
+      } else if (opcion === "resistencia") {
+        html += '<label>Voltaje (V en V): <input type="number" step="any" name="V" required></label>';
+        html += '<label>Corriente (I en A): <input type="number" step="any" name="I" required></label>';
+      } else if (opcion === "capacitancia") {
+        html += '<label>Carga (Q en C): <input type="number" step="any" name="Q" required></label>';
+        html += '<label>Voltaje (V en V): <input type="number" step="any" name="V" required></label>';
+      } else if (opcion === "carga") {
+        html += '<label>Capacitancia (C en F): <input type="number" step="any" name="C" required></label>';
+        html += '<label>Voltaje (V en V): <input type="number" step="any" name="V" required></label>';
+      }
+
+      if (html !== "") {
+        html += '<button type="submit">Calcular</button>';
+        formulario.innerHTML = html;
+      }
+    }
+
+    function calcular(e) {
+      e.preventDefault();
+      const opcion = document.getElementById("opcion").value;
+      const form = new FormData(e.target);
+      let resultado = "";
+
+      if (opcion === "voltaje") {
+        const I = parseFloat(form.get("I"));
+        const R = parseFloat(form.get("R"));
+        resultado = `Voltaje: ${I * R} V`;
+      } else if (opcion === "corriente") {
+        const V = parseFloat(form.get("V"));
+        const R = parseFloat(form.get("R"));
+        resultado = `Corriente: ${V / R} A`;
+      } else if (opcion === "resistencia") {
+        const V = parseFloat(form.get("V"));
+        const I = parseFloat(form.get("I"));
+        resultado = `Resistencia: ${V / I} Ω`;
+      } else if (opcion === "capacitancia") {
+        const Q = parseFloat(form.get("Q"));
+        const V = parseFloat(form.get("V"));
+        resultado = `Capacitancia: ${Q / V} F`;
+      } else if (opcion === "carga") {
+        const C = parseFloat(form.get("C"));
+        const V = parseFloat(form.get("V"));
+        resultado = `Carga: ${C * V} C`;
+      }
+
+      document.getElementById("resultado").innerText = resultado;
+    }
+  </script>
+
+</body>
+</html>
